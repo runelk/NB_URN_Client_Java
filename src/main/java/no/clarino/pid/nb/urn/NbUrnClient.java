@@ -13,12 +13,21 @@ import java.util.Map;
  */
 public class NbUrnClient {
     private Map <String, String> config;
-    private IdService client;
+    // private IdService client;
+    private IdTestService client;
     private String ssoToken;
 
     public NbUrnClient(String config) throws NbUrnException {
-        this.client = new IdService_Service().getPort(IdService.class);
+        Yaml yaml = new Yaml();
         this.config = loadConfig(config);
+        // this.client = new IdService_Service().getPort(IdService.class);
+        this.client = new IdTestService_Service().getPort(IdTestService.class);
+    }
+
+    public NbUrnClient(String config, String username, String password) throws NbUrnException {
+        this(config);
+        this.config.put("username", username);
+        this.config.put("password", password);
     }
 
     public Map<String, String> getConfig() {
@@ -47,15 +56,6 @@ public class NbUrnClient {
         } catch (FileNotFoundException e) {
             throw new NbUrnException(e);
         }
-    }
-
-    public NbUrnClient(String config, String username, String password) throws NbUrnException {
-        this.client = new IdService_Service().getPort(IdService.class);
-        Yaml yaml = new Yaml();
-        this.config = loadConfig(config);
-        this.config.put("username", username);
-        this.config.put("password", password);
-        System.out.println(this.config.toString());
     }
 
     public URNInfo findURN(String urn) throws NbUrnException {
