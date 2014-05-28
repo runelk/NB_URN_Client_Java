@@ -9,7 +9,8 @@ See the unit test class for NbUrnClient for usage examples.
 
 Dependencies
 ------------
-* SnakeYAML
+* SnakeYAML 1.8
+* JUnit 4.9
 
 
 
