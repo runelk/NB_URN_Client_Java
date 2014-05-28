@@ -29,6 +29,14 @@ public class NbUrnClient {
         this.config = config;
     }
 
+    public String getSsoToken() {
+        return ssoToken;
+    }
+
+    public void setSsoToken(String ssoToken) {
+        this.ssoToken = ssoToken;
+    }
+
     private Map loadConfig(String filename) throws NbUrnException {
         File f = new File(filename);
         try {
@@ -50,14 +58,6 @@ public class NbUrnClient {
         System.out.println(this.config.toString());
     }
 
-    public String getSsoToken() {
-        return ssoToken;
-    }
-
-    public void setSsoToken(String ssoToken) {
-        this.ssoToken = ssoToken;
-    }
-
     public URNInfo findURN(String urn) throws NbUrnException {
         try {
             return this.client.findURN(urn);
@@ -76,37 +76,83 @@ public class NbUrnClient {
         }
     }
 
-    public void addUrl(String urn, String url) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo addUrl(String urn, String url) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.addURL(this.ssoToken, urn, url);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InvalidURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (ObjectAlreadyExistsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNNotFoundException_Exception e) {
+            e.printStackTrace();
+        } catch (MalformedURNException_Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public URNInfo createUrn(String seriesCode, String url) throws NbUrnException {
-        throw new UnsupportedOperationException("Not implemented yet");
-//        try {
-//            return this.client.createURN("", seriesCode, url);
-//        } catch (FailedLoginException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (IllegalActionException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (InsufficientRightsException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (InvalidURLException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (MalformedURLException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (ObjectAlreadyExistsException_Exception e) {
-//            throw new NbUrnException(e);
-//        } catch (URNSeriesNotFoundException_Exception e) {
-//            throw new NbUrnException(e);
-//        }
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.createURN(this.ssoToken, seriesCode, url);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InvalidURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (ObjectAlreadyExistsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (IllegalActionException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNSeriesNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void deleteUrl(String urn, String url) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo deleteUrl(String urn, String url) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.deleteURL(this.ssoToken, urn, url);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URLNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (TooFewURLsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void getNextUrn(String seriesCode) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public String getNextUrn(String seriesCode) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.getNextURN(this.ssoToken, seriesCode);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (IllegalActionException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNSeriesNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
     public String login() throws NbUrnException {
@@ -134,24 +180,105 @@ public class NbUrnClient {
         }
     }
 
-    public void registerUrn(String urn, String url) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo registerUrn(String urn, String url) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.registerURN(this.ssoToken, urn, url);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (IllegalActionException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InvalidURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (ObjectAlreadyExistsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNSeriesNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void replaceUrl(String urn, String oldUrl, String newUrl) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo replaceUrl(String urn, String oldUrl, String newUrl) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.replaceURL(this.ssoToken, urn, oldUrl, newUrl);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InvalidURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (ObjectAlreadyExistsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URLNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void reserveNextUrn(String seriesCode) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo reserveNextUrn(String seriesCode) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.reserveNextURN(this.ssoToken, seriesCode);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (IllegalActionException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNSeriesNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNSeriesCodeException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void reserveUrn(String urn) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo reserveUrn(String urn) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.reserveURN(this.ssoToken, urn);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (ObjectAlreadyExistsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (IllegalActionException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNSeriesNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
-    public void setDefaultUrl(String urn, String url) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public URNInfo setDefaultUrl(String urn, String url) throws NbUrnException {
+        if (this.ssoToken == null) { throw new SsoTokenException("You need to be logged in for this call."); }
+        try {
+            return this.client.setDefaultURL(this.ssoToken, urn, url);
+        } catch (FailedLoginException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (InsufficientRightsException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURNException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URNNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (MalformedURLException_Exception e) {
+            throw new NbUrnException(e);
+        } catch (URLNotFoundException_Exception e) {
+            throw new NbUrnException(e);
+        }
     }
 
 }
