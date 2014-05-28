@@ -16,8 +16,8 @@ import static junit.framework.Assert.assertNull;
  */
 public class NbUrnClientTest {
     private NbUrnClient client;
-    private String urn = "URN:NBN:no-36027";
-    private String url = "https://www.duo.uio.no/handle/10852/35837";
+    private String urn = "URN:NBN:no-nb_ClarinoPrefix2_1_30";
+    private String url = "http://www.slashdot.org/";
 
     @Before
     public void setUp() throws Exception {
@@ -111,7 +111,6 @@ public class NbUrnClientTest {
     @Test
     public void testRegisterUrn() throws Exception {
         this.client.login();
-        //System.out.println(this.client.getConfig().toString());
         URNInfo urnInfo = this.client.registerUrn("URN:NBN:no-nb_ClarinoPrefix2_1_31", "http://www.reddit.com");
         this.client.logout();
         System.out.println(urnInfo.toString());
