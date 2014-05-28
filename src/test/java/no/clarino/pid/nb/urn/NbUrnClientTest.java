@@ -109,9 +109,12 @@ public class NbUrnClientTest {
     }
 
     @Test
-    @Ignore("Not ready yet.")
     public void testRegisterUrn() throws Exception {
-
+        this.client.login();
+        //System.out.println(this.client.getConfig().toString());
+        URNInfo urnInfo = this.client.registerUrn("URN:NBN:no-nb_ClarinoPrefix2_1_31", "http://www.reddit.com");
+        this.client.logout();
+        System.out.println(urnInfo.toString());
     }
 
     @Test
