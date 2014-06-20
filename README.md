@@ -1,6 +1,16 @@
 Java Client for the URN PID service by the National Library of Norway
 =======================================================================
 
+This is a library and a set of command line tools for communicating with the SOAP ID service available at the National Library of Norway.
+
+For more information (in Norwegian) about the service:
+* Regarding URN: http://www.nb.no/idtjeneste/about_urn.jsf
+* Regarding the SOAP API: http://www.nb.no/idtjeneste/about_urn_webservice.jsf
+
+Configuration
+-------------
+
+The **config** directory contains an example of the YAML config file used by the client (**config.yml.example**). Copy this to e.g. **config.yml** and replace the dummy entries with the information you have received from the National Library.
 
 Library
 -------
