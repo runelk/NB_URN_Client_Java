@@ -15,6 +15,7 @@ public class NbUrnClient {
     private Map <String, String> config;
     // private IdService client;
     private IdTestService client;
+    //private IdMockService client;
     private String ssoToken;
 
     public NbUrnClient(String config) throws NbUrnException {
@@ -22,6 +23,7 @@ public class NbUrnClient {
         this.config = loadConfig(config);
         // this.client = new IdService_Service().getPort(IdService.class);
         this.client = new IdTestService_Service().getPort(IdTestService.class);
+        //this.client = new IdMockService_Service().getPort(IdMockService.class);
     }
 
     public NbUrnClient(String config, String username, String password) throws NbUrnException {

@@ -16,8 +16,8 @@ import static junit.framework.Assert.assertNull;
  */
 public class NbUrnClientTest {
     private NbUrnClient client;
-    private String urn = "URN:NBN:no-nb_ClarinoPrefix2_1_30";
-    private String url = "http://www.slashdot.org/";
+    private String urn = "URN:NBN:no-nb_ClarinoPrefix2_10";
+    private String url = "http://www.dagbladet.no/";
 
     @Before
     public void setUp() throws Exception {
@@ -43,10 +43,10 @@ public class NbUrnClientTest {
     @Test
     public void testFindURN() throws Exception {
         URNInfo urnInfo = this.client.findURN(this.urn);
-        assertEquals(urnInfo.getDefaultURL(), this.url);
-        assertEquals(urnInfo.getURN(), this.urn);
-        assertEquals(urnInfo.getUrlList().getUrl().size(), 1);
-        assertEquals(urnInfo.getUrlList().getUrl().get(0).getURL(), this.url);
+        assertEquals(this.url, urnInfo.getDefaultURL());
+        assertEquals(this.urn, urnInfo.getURN());
+        assertEquals(1, urnInfo.getUrlList().getUrl().size());
+        assertEquals(this.url, urnInfo.getUrlList().getUrl().get(0).getURL());
         System.out.println(urnInfo.toString());
     }
 
@@ -69,13 +69,29 @@ public class NbUrnClientTest {
     @Test
     @Ignore("Not ready yet.")
     public void testCreateUrn() throws Exception {
-
+        this.client.login();
+        URNInfo urnInfo = this.client.createUrn("URN:NBN:no-nb_ClarinoPrefix2", "http://www.google.com/");
+        this.client.logout();
+        assertEquals("http://www.google.com/", urnInfo.getDefaultURL());
+        System.out.println(urnInfo.toString());
     }
 
     @Test
-    @Ignore("Not ready yet.")
     public void testDeleteUrl() throws Exception {
-
+        this.client.login();
+        URNInfo urnInfo = this.client.reserveNextUrn("URN:NBN:no-nb_ClarinoPrefix2");
+        this.client.addUrl(urnInfo.getURN(), "http://www.google.com/");
+        this.client.addUrl(urnInfo.getURN(), "http://www.yahoo.com/");
+        this.client.setDefaultUrl(urnInfo.getURN(), "http://www.google.com/");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http://www.google.com/", urnInfo.getDefaultURL());
+        assertEquals("http://www.google.com/", urnInfo.getUrlList().getUrl().get(0).getURL());
+        assertEquals(2, urnInfo.getUrlList().getUrl().size());
+        this.client.deleteUrl(urnInfo.getURN(), "http://www.google.com/");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http://www.yahoo.com/", urnInfo.getDefaultURL());
+        assertEquals(1, urnInfo.getUrlList().getUrl().size());
+        this.client.logout();
     }
 
     @Test
@@ -109,6 +125,7 @@ public class NbUrnClientTest {
     }
 
     @Test
+    @Ignore("Not ready yet.")
     public void testRegisterUrn() throws Exception {
         this.client.login();
         URNInfo urnInfo = this.client.registerUrn("URN:NBN:no-nb_ClarinoPrefix2_1_31", "http://www.reddit.com");
@@ -117,9 +134,22 @@ public class NbUrnClientTest {
     }
 
     @Test
-    @Ignore("Not ready yet.")
     public void testReplaceUrl() throws Exception {
+        this.client.login();
+        URNInfo urnInfo = this.client.reserveNextUrn("URN:NBN:no-nb_ClarinoPrefix2");
+        this.client.addUrl(urnInfo.getURN(), "http://www.google.com/");
+        this.client.addUrl(urnInfo.getURN(), "http://www.yahoo.com/");
+        this.client.setDefaultUrl(urnInfo.getURN(), "http://www.google.com/");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http://www.google.com/", urnInfo.getDefaultURL());
+        assertEquals("http://www.google.com/", urnInfo.getUrlList().getUrl().get(0).getURL());
 
+        this.client.replaceUrl(urnInfo.getURN(), "http://www.google.com/", "http://www.uio.no/");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http://www.uio.no/", urnInfo.getDefaultURL());
+        assertEquals(2, urnInfo.getUrlList().getUrl().size());
+        assertEquals("http://www.uio.no/", urnInfo.getUrlList().getUrl().get(0).getURL());
+        this.client.logout();
     }
 
     @Test
@@ -135,8 +165,15 @@ public class NbUrnClientTest {
     }
 
     @Test
-    @Ignore("Not ready yet.")
     public void testSetDefaultUrl() throws Exception {
-
+        this.client.login();
+        URNInfo urnInfo = this.client.reserveNextUrn("URN:NBN:no-nb_ClarinoPrefix2");
+        this.client.addUrl(urnInfo.getURN(), "http://www.google.com/");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http:", urnInfo.getDefaultURL());
+        this.client.setDefaultUrl(urnInfo.getURN(), "http://www.google.com");
+        urnInfo = this.client.findURN(urnInfo.getURN());
+        assertEquals("http://www.google.com/", urnInfo.getDefaultURL());
+        this.client.logout();
     }
 }
